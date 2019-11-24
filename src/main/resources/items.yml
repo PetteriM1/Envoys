@@ -1,0 +1,12 @@
+# Config version, do not edit!
+version: 1
+
+# Items
+items:
+  - "260:0:10"
+  - "1:0:64"
+  - "267:0:1:Example:16:4"
+
+# Effects
+effects:
+  - "speed:2:120"

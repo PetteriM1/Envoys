@@ -1,0 +1,29 @@
+# Config version, do not edit!
+configVersion: 1
+
+# Time between envoys (in seconds)
+time: 600
+
+# How long does envoys last (in seconds)
+duration: 300
+
+# How often should a firework spawn at envoys (in seconds)
+# Set to -1 to disable
+hint: 60
+
+# Sound for envoy event start and stop
+# Leave empty for no sound
+startSound: ""
+endSound: ""
+
+# Translations
+envoy.set: "§aEnvoy set"
+envoy.delete: "§aEnvoy deleted"
+command.ingame: "§cThis command can be only used in game"
+command.time.left: "§6Time to next envoy: "
+command.editmode.enabled: "§aEdit mode enabled"
+command.editmode.disabled: "§aEdit mode disabled"
+command.drops.locations: "§7Envoys may spawn at these locations: "
+items.given: "§aYou got: §e"
+envoy.event.start: "§aEvent started!"
+envoy.event.end: "§6Event ended!"
