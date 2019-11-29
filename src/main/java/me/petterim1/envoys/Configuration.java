@@ -189,7 +189,7 @@ public class Configuration {
     private void playsound(String sound) {
         //TODO
     }
-    
+
     private void checkLicense() {
         if (!pl.getDescription().getAuthors().contains("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys")) {
             System.exit(1);
