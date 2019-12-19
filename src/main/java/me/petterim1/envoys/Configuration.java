@@ -191,7 +191,7 @@ public class Configuration {
     }
 
     private void checkLicense() {
-        if (!pl.getDescription().getAuthors().contains("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys")) {
+        if (!pl.getDescription().getAuthors().get(0).equals("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys")) {
             System.exit(1);
         }
     }
