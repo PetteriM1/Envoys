@@ -1,12 +1,25 @@
 # Config version, do not edit!
 version: 1
 
-# Items
-items:
+# Format:
+# id:meta:count:chance:name:enchantmentId:enchantmentLevel
+
+# Items for normal envoys
+itemsNormal:
   - "260:0:10"
   - "1:0:64"
   - "267:0:1:Example:16:4"
 
-# Effects
-effects:
+# Items for super envoys
+itemsSuper:
+  - "260:0:10"
+  - "1:0:64"
+  - "267:0:1:Example:16:4"
+
+# Effects for normal envoys
+effectsNormal:
+  - "speed:1:120"
+
+# Effects for super envoys
+effectsSuper:
   - "speed:2:120"
