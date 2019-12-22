@@ -27,6 +27,7 @@ public class Configuration {
     private String stopSound;
     private List<Location> allEnvoys = new ArrayList<>();
     private List<ItemSlot> items = new ArrayList<>();
+    private List<EffectSlot> effects = new ArrayList<>();
     private Map<Location, Boolean> currentEnvoys = new HashMap();
     private static final SplittableRandom r = new SplittableRandom();
 
@@ -94,7 +95,22 @@ public class Configuration {
             return false;
         }
 
-        //TODO: load items for normal and super envoys
+        try {
+            for (String s : i.getStringList("itemsNormal")) {
+                //items.add(new ItemSlot(chance, false, id, meta, count, name, enchantment, level));
+            }
+            for (String s : i.getStringList("itemsSuper")) {
+                //items.add(new ItemSlot(chance, true, id, meta, count, name, enchantment, level));
+            }
+            for (String s : i.getStringList("effectsNormal")) {
+                //effects.add(new EffectSlot(chance, false, id, amplifier, duration));
+            }
+            for (String s : i.getStringList("effectsSuper")) {
+                //effects.add(new EffectSlot(chance, true, id, amplifier, duration));
+            }
+        } catch (Exception ignore) {
+            return false;
+        }
         return true;
     }
 

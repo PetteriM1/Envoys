@@ -16,6 +16,9 @@ itemsSuper:
   - "1:0:64"
   - "267:0:1:Example:16:4"
 
+# Format:
+# id:amplifier:duration:chance
+
 # Effects for normal envoys
 effectsNormal:
   - "speed:1:120"
