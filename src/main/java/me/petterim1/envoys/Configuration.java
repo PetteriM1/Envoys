@@ -6,9 +6,7 @@ import cn.nukkit.level.Location;
 import cn.nukkit.network.protocol.PlaySoundPacket;
 import cn.nukkit.utils.Config;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SplittableRandom;
+import java.util.*;
 
 public class Configuration {
 
@@ -27,7 +25,7 @@ public class Configuration {
     private double rareChance;
     private String startSound;
     private String stopSound;
-    private Map<Location, Boolean> allEnvoys = new HashMap();
+    private List<Location> allEnvoys = new ArrayList<>();
     private Map<Location, Boolean> currentEnvoys = new HashMap();
     private static final SplittableRandom r = new SplittableRandom();
 
@@ -72,10 +70,10 @@ public class Configuration {
     }
 
     boolean setEnvoy(Location loc) {
-        if (allEnvoys.containsKey(loc)) {
+        if (allEnvoys.contains(loc)) {
             return false;
         }
-        allEnvoys.put(loc, rand());
+        allEnvoys.add(loc);
         return true;
     }
 
@@ -95,7 +93,7 @@ public class Configuration {
             return false;
         }
 
-        //TODO
+        //TODO: load items for normal and super envoys
         return true;
     }
 
@@ -103,7 +101,13 @@ public class Configuration {
         try {
             d = new Config(pl.getDataFolder() + "/data.yml", Config.YAML);
 
-            //TODO
+            if (d.getBoolean("firstRun", true)) {
+                pl.getServer().getLogger().info(Envoys.prefix + "\u00A7aEnvoys plugin by PetteriM1 loaded! Please consider leaving a rating on nukkitx.com if you like the plugin :)");
+                d.set("firstRun", false);
+                d.save();
+            }
+
+            //TODO: load locations
         } catch (Exception ignore) {
             pl.getLogger().error("There was an error while loading saved data. Invalid data.yml file detected.");
         }
@@ -126,14 +130,14 @@ public class Configuration {
 
     String getLocations() {
         StringBuilder str = new StringBuilder();
-        for (Location loc : allEnvoys.keySet()) {
+        for (Location loc : allEnvoys) {
             str.append(loc.x).append(", ").append(loc.y).append(", ").append(loc.z).append(", ").append(loc.level.getName()).append("\n");
         }
         return str.toString();
     }
 
     void quitEditmode() {
-        for (Location loc : allEnvoys.keySet()) {
+        for (Location loc : allEnvoys) {
             loc.getLevel().setBlock(loc, Block.get(0), true, false);
         }
     }
@@ -222,17 +226,16 @@ public class Configuration {
         }
     }
 
-    private static boolean rand() {
-        switch (r.nextInt(10)) {
-            case 2:
-            case 6:
-            case 8:
-                return true;
-        }
-        return false;
+    private boolean rand() {
+        return r.nextDouble(10) * rareChance > 9.0;
     }
 
     private void placeRandomEnvoys() {
-        //todo: place, broadcast placed + count
+        //todo: place, broadcast placed + count, set randoms
+        for (Location l : allEnvoys) {
+            /*if () {
+                currentEnvoys.put(l, rand());
+            }*/
+        }
     }
 }

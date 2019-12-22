@@ -20,7 +20,6 @@ public class Envoys extends PluginBase {
         getServer().getCommandMap().register("envoy", new Command(this));
         getServer().getPluginManager().registerEvents(new Events(this), this);
         getServer().getScheduler().scheduleDelayedRepeatingTask(this, new Task(this), 20, 20);
-        getServer().getLogger().info(prefix + "\u00A7aEnvoys plugin by PetteriM1 loaded! Please consider leaving a rating on nukkitx.com if you like the plugin :)");
     }
 
     public void onDisable() {
