@@ -70,5 +70,6 @@ public class Command extends cn.nukkit.command.Command { //TODO: perms
 
     private static void showEditmodeHelp(CommandSender s) {
         s.sendMessage("DEBUG: showEditmodeHelp");
+        //TODO
     }
 }

@@ -26,6 +26,7 @@ public class Configuration {
     private String startSound;
     private String stopSound;
     private List<Location> allEnvoys = new ArrayList<>();
+    private List<ItemSlot> items = new ArrayList<>();
     private Map<Location, Boolean> currentEnvoys = new HashMap();
     private static final SplittableRandom r = new SplittableRandom();
 
