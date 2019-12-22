@@ -11,10 +11,14 @@ duration: 300
 # Set to -1 to disable
 hint: 60
 
+# multiplier for rare envoy spawning chance
+# you can set this to 0.0 to disable rare envoys
+rareChance: 1.0
+
 # Sound for envoy event start and stop
 # Leave empty for no sound
-startSound: ""
-endSound: ""
+startSound: "raid.horn"
+endSound: "beacon.power"
 
 # Translations
 envoy.set: "§aEnvoy set"

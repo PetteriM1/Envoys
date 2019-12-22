@@ -3,6 +3,7 @@ package me.petterim1.envoys;
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
 import cn.nukkit.level.Location;
+import cn.nukkit.network.protocol.PlaySoundPacket;
 import cn.nukkit.utils.Config;
 
 import java.util.HashMap;
@@ -23,6 +24,9 @@ public class Configuration {
     int nowTicks;
     int hint;
     int hintTicks;
+    private double rareChance;
+    private String startSound;
+    private String stopSound;
     private Map<Location, Boolean> allEnvoys = new HashMap();
     private Map<Location, Boolean> currentEnvoys = new HashMap();
     private static final SplittableRandom r = new SplittableRandom();
@@ -44,7 +48,7 @@ public class Configuration {
             }
         }
 
-        hint = c.getInt("hint", -1);
+        loadSettings();
 
         if (!loadItems()) {
             return false;
@@ -58,6 +62,13 @@ public class Configuration {
 
     private boolean tryUpdate() {
         return false;
+    }
+
+    private void loadSettings() {
+        hint = c.getInt("hint", -1);
+        startSound = c.getString("startSound");
+        stopSound = c.getString("endSound");
+        rareChance = c.getDouble("rareChance", 1.0);
     }
 
     boolean setEnvoy(Location loc) {
@@ -177,17 +188,26 @@ public class Configuration {
         switch (mode) {
             case "start":
                 pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.start"));
-                //playsound(startSound);
+                playsound(startSound);
                 break;
             case "end":
                 pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end"));
-                //playsound(stopSound);
+                playsound(stopSound);
                 break;
         }
     }
 
-    private void playsound(String sound) {
-        //TODO
+    private void playsound(String s) {
+        for (Player p : pl.getServer().getOnlinePlayers().values()) {
+            PlaySoundPacket pk = new PlaySoundPacket();
+            pk.name = s;
+            pk.volume = 1;
+            pk.pitch = 1;
+            pk.x = (int) p.x;
+            pk.y = (int) p.y;
+            pk.z = (int) p.z;
+            p.dataPacket(pk);
+        }
     }
 
     private void checkLicense() {
