@@ -20,32 +20,23 @@ public class Effects {
     }
 
     void spawnOpenEffect(boolean e, Location loc) {
-        CompoundTag nbt = new CompoundTag()
-                .putList(new ListTag<DoubleTag>("Pos")
-                        .add(new DoubleTag("", loc.x + 0.5))
-                        .add(new DoubleTag("", loc.y + 0.5))
-                        .add(new DoubleTag("", loc.z + 0.5)))
-                .putList(new ListTag<DoubleTag>("Motion")
-                        .add(new DoubleTag("", 0))
-                        .add(new DoubleTag("", 0))
-                        .add(new DoubleTag("", 0)))
-                .putList(new ListTag<FloatTag>("Rotation")
-                        .add(new FloatTag("", 0))
-                        .add(new FloatTag("", 0)));
-
         if (e) {
-            new Firework(pl, (byte) 3, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), nbt).spawnToAll();
-            new Firework(pl, (byte) 4, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), nbt).spawnToAll();
+            new Firework(pl, (byte) 3, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+            new Firework(pl, (byte) 4, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
         } else {
-            new Firework(pl, (byte) 1, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), nbt).spawnToAll();
-            new Firework(pl, (byte) 2, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), nbt).spawnToAll();
+            new Firework(pl, (byte) 1, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+            new Firework(pl, (byte) 2, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
         }
 
         loc.getLevel().addLevelSoundEvent(loc, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, EntityFirework.NETWORK_ID);
     }
 
     void spawnRandomEffects() {
-        //for (Location loc : pl.c.locations.keys()) {
+        for (Location loc : pl.c.currentEnvoys.keySet()) {
+            EntityFirework f = new EntityFirework(loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc));
+            f.setFirework(getItemHint());
+            f.spawnToAll();
+        }
     }
 
     Item getItem1() {
@@ -114,5 +105,37 @@ public class Effects {
         );
         i.setNamedTag(tag);
         return i;
+    }
+
+    Item getItemHint() {
+        Item i = new ItemFirework();
+        CompoundTag tag = new CompoundTag();
+        CompoundTag ex = new CompoundTag()
+                .putByteArray("FireworkColor", new byte[]{(byte) DyeColor.RED.getDyeData()})
+                .putByteArray("FireworkFade", new byte[]{})
+                .putBoolean("FireworkFlicker", false)
+                .putBoolean("FireworkTrail", false)
+                .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.SMALL_BALL.ordinal());
+        tag.putCompound("Fireworks", new CompoundTag("Fireworks")
+                .putList(new ListTag<CompoundTag>("Explosions").add(ex))
+                .putByte("Flight", 1)
+        );
+        i.setNamedTag(tag);
+        return i;
+    }
+
+    private static CompoundTag getNBT(Location loc) {
+        return new CompoundTag()
+                .putList(new ListTag<DoubleTag>("Pos")
+                        .add(new DoubleTag("", loc.x + 0.5))
+                        .add(new DoubleTag("", loc.y + 0.5))
+                        .add(new DoubleTag("", loc.z + 0.5)))
+                .putList(new ListTag<DoubleTag>("Motion")
+                        .add(new DoubleTag("", 0))
+                        .add(new DoubleTag("", 0))
+                        .add(new DoubleTag("", 0)))
+                .putList(new ListTag<FloatTag>("Rotation")
+                        .add(new FloatTag("", 0))
+                        .add(new FloatTag("", 0)));
     }
 }

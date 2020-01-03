@@ -28,7 +28,7 @@ public class Configuration {
     private List<Location> allEnvoys = new ArrayList<>();
     private List<ItemSlot> items = new ArrayList<>();
     private List<EffectSlot> effects = new ArrayList<>();
-    private Map<Location, Boolean> currentEnvoys = new HashMap();
+    protected Map<Location, Boolean> currentEnvoys = new HashMap();
     private static final SplittableRandom r = new SplittableRandom();
 
     Configuration(Envoys pl, Config c) {
