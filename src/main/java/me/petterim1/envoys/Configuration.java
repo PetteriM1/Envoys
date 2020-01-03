@@ -21,6 +21,7 @@ public class Configuration {
     int nowTicks;
     int hint;
     int hintTicks;
+    private int minimumLoot;
     private double rareChance;
     private String startSound;
     private String stopSound;
@@ -68,6 +69,7 @@ public class Configuration {
         startSound = c.getString("startSound");
         stopSound = c.getString("endSound");
         rareChance = c.getDouble("rareChance", 1.0);
+        minimumLoot = c.getInt("minimumLoot", 3);
     }
 
     boolean setEnvoy(Location loc) {
@@ -174,7 +176,7 @@ public class Configuration {
                 d.save();
             }
 
-            //TODO: load locations
+            allEnvoys = (List<Location>) d.getList("envoys"); //TODO: test
         } catch (Exception e) {
             pl.getLogger().error("There was an error while loading saved data. Invalid data.yml file detected.", e);
         }
@@ -185,7 +187,7 @@ public class Configuration {
     }
 
     String getTime() {
-        return now ? "\u00A7anow" : (((nextEnvoy % 86400 ) / 3600) + "h " + (((nextEnvoy % 86400 ) % 3600 ) / 60) + "m " + (((nextEnvoy % 86400 ) % 3600 ) % 60) + "s");
+        return now ? "\u00A7anow" : (((nextEnvoy % 86400 ) / 3600) + "h " + (((nextEnvoy % 86400 ) % 3600 ) / 60) + "m " + (((nextEnvoy % 86400 ) % 3600 ) % 60) + 's');
     }
 
     void saveData() {
@@ -198,7 +200,7 @@ public class Configuration {
     String getLocations() {
         StringBuilder str = new StringBuilder();
         for (Location loc : allEnvoys) {
-            str.append(loc.x).append(", ").append(loc.y).append(", ").append(loc.z).append(", ").append(loc.level.getName()).append("\n");
+            str.append(loc.x).append(", ").append(loc.y).append(", ").append(loc.z).append(", ").append(loc.level.getName()).append('\n');
         }
         return str.toString();
     }
@@ -233,11 +235,20 @@ public class Configuration {
     }
 
     private void giveItems(Player p, boolean su) {
-        String items = "";
-        //for (Item i : ) {
-        //  items += i.getName();
-        //}
-        p.sendMessage(Envoys.prefix + translate("items.given") + items);
+        StringBuilder names = new StringBuilder();
+        int itemsGiven = 0;
+        while (itemsGiven < minimumLoot) {
+            for (ItemSlot slot : items) {
+                if ((su && !slot.su) || (!su && slot.su)) {
+                    if (rand(slot.chance)) {
+                        names.append('[').append(slot.item.getName()).append(']');
+                        p.getInventory().addItem(slot.item);
+                        itemsGiven++;
+                    }
+                }
+            }
+        }
+        p.sendMessage(Envoys.prefix + translate("items.given") + names);
     }
 
     void doEnvoy() {
@@ -293,8 +304,12 @@ public class Configuration {
         }
     }
 
-    private boolean rand() {
+    private boolean rand() { //todo: use this to set super envoys
         return r.nextDouble(10) * rareChance > 9.0;
+    }
+
+    private boolean rand(double chance) {
+        return r.nextDouble(5) * chance > 2.0;
     }
 
     private void placeRandomEnvoys() {

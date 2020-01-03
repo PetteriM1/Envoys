@@ -15,6 +15,9 @@ hint: 60
 # you can set this to 0.0 to disable rare envoys
 rareChance: 1.0
 
+# minimum amount of item stacks player must get from a single envoy
+minimumLoot: 3
+
 # Sound for envoy event start and stop
 # Leave empty for no sound
 startSound: "raid.horn"
