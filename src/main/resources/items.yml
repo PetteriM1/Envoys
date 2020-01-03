@@ -2,27 +2,27 @@
 version: 1
 
 # Format:
-# id:meta:count:chance:name:enchantmentId:enchantmentLevel
+# id:meta:count:chance[:name][:enchantmentId:enchantmentLevel]
 
 # Items for normal envoys
 itemsNormal:
-  - "260:0:10"
-  - "1:0:64"
-  - "267:0:1:Example:16:4"
+  - "260:0:10:1.0"
+  - "1:0:64:1.0"
+  - "267:0:1:1.0:Example:16:4"
 
 # Items for super envoys
 itemsSuper:
-  - "260:0:10"
-  - "1:0:64"
-  - "267:0:1:Example:16:4"
+  - "260:0:10:1.0"
+  - "1:0:64:1.0"
+  - "267:0:1:1.0:Example:16:4"
 
 # Format:
 # id:amplifier:duration:chance
 
 # Effects for normal envoys
 effectsNormal:
-  - "speed:1:120"
+  - "1:1:120:1.0"
 
 # Effects for super envoys
 effectsSuper:
-  - "speed:2:120"
+  - "1:2:120:1.0"

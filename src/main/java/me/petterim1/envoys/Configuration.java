@@ -13,7 +13,6 @@ public class Configuration {
     private Envoys pl;
     Effects e;
     private Config c;
-    private Config i;
     private Config d;
     private static final int c_ver = 1;
     boolean loaded;
@@ -88,7 +87,8 @@ public class Configuration {
     }
 
     private boolean loadItems() {
-        i = new Config(pl.getDataFolder() + "/items.yml", Config.YAML);
+        Config i = new Config(pl.getDataFolder() + "/items.yml", Config.YAML);
+
         if (c_ver != i.getInt("version")) {
             pl.getLogger().error("Invalid item config. Plugin will be disabled.");
             pl.getServer().getPluginManager().disablePlugin(pl);
@@ -97,20 +97,70 @@ public class Configuration {
 
         try {
             for (String s : i.getStringList("itemsNormal")) {
-                //items.add(new ItemSlot(chance, false, id, meta, count, name, enchantment, level));
+                String[] info = s.split(":");
+                String name;
+                int enchantment;
+                int level;
+                if (info.length > 4 && info[4] != null) {
+                    if (info.length > 6 && info[6] != null) {
+                        name = info[4];
+                        enchantment = Integer.parseInt(info[5]);
+                        level = Integer.parseInt(info[6]);
+                    } else if (info.length > 5 && info[5] != null) {
+                        name = "";
+                        enchantment = Integer.parseInt(info[4]);
+                        level = Integer.parseInt(info[5]);
+                    } else {
+                        name = info[4];
+                        enchantment = -1;
+                        level = -1;
+                    }
+                } else {
+                    name = "";
+                    enchantment = -1;
+                    level = -1;
+                }
+                items.add(new ItemSlot(Double.parseDouble(info[3]), false, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enchantment, level));
             }
             for (String s : i.getStringList("itemsSuper")) {
-                //items.add(new ItemSlot(chance, true, id, meta, count, name, enchantment, level));
+                String[] info = s.split(":");
+                String name;
+                int enchantment;
+                int level;
+                if (info.length > 4 && info[4] != null) {
+                    if (info.length > 6 && info[6] != null) {
+                        name = info[4];
+                        enchantment = Integer.parseInt(info[5]);
+                        level = Integer.parseInt(info[6]);
+                    } else if (info.length > 5 && info[5] != null) {
+                        name = "";
+                        enchantment = Integer.parseInt(info[4]);
+                        level = Integer.parseInt(info[5]);
+                    } else {
+                        name = info[4];
+                        enchantment = -1;
+                        level = -1;
+                    }
+                } else {
+                    name = "";
+                    enchantment = -1;
+                    level = -1;
+                }
+                items.add(new ItemSlot(Double.parseDouble(info[3]), true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enchantment, level));
             }
             for (String s : i.getStringList("effectsNormal")) {
-                //effects.add(new EffectSlot(chance, false, id, amplifier, duration));
+                String[] info = s.split(":");
+                effects.add(new EffectSlot(Double.parseDouble(info[3]), false, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2])));
             }
             for (String s : i.getStringList("effectsSuper")) {
-                //effects.add(new EffectSlot(chance, true, id, amplifier, duration));
+                String[] info = s.split(":");
+                effects.add(new EffectSlot(Double.parseDouble(info[3]), true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2])));
             }
-        } catch (Exception ignore) {
+        } catch (Exception e) {
+            pl.getLogger().error("An error occurred while trying to load items config.", e);
             return false;
         }
+
         return true;
     }
 
@@ -125,8 +175,8 @@ public class Configuration {
             }
 
             //TODO: load locations
-        } catch (Exception ignore) {
-            pl.getLogger().error("There was an error while loading saved data. Invalid data.yml file detected.");
+        } catch (Exception e) {
+            pl.getLogger().error("There was an error while loading saved data. Invalid data.yml file detected.", e);
         }
     }
 
