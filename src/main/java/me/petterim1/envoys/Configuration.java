@@ -225,6 +225,7 @@ public class Configuration {
         currentEnvoys.remove(loc);
         e.spawnOpenEffect(isSuper, loc);
         giveItems(p, isSuper);
+        giveEffects(p, isSuper);
         checkLastEnvoy();
     }
 
@@ -249,6 +250,23 @@ public class Configuration {
             }
         }
         p.sendMessage(Envoys.prefix + translate("items.given") + names);
+    }
+
+    private void giveEffects(Player p, boolean su) {
+        StringBuilder names = new StringBuilder();
+        int given = 0;
+        while (given < Math.min(1, effects.size())) {
+            for (EffectSlot slot : effects) {
+                if ((su && !slot.su) || (!su && slot.su)) {
+                    if (rand(slot.chance)) {
+                        names.append('[').append(slot.effect.getName()).append(']');
+                        slot.effect.add(p);
+                        given++;
+                    }
+                }
+            }
+        }
+        p.sendMessage(Envoys.prefix + translate("effects.given") + names);
     }
 
     void doEnvoy() {
