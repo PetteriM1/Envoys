@@ -39,6 +39,14 @@ public class Effects {
         }
     }
 
+    void spawnPlacedEffect(Location loc, boolean su) {
+        new Firework(pl, (byte) 4, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+
+        if (su) {
+            new Firework(pl, (byte) 2, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+        }
+    }
+
     Item getItem1() {
         Item i = new ItemFirework();
         CompoundTag tag = new CompoundTag();

@@ -21,6 +21,10 @@ public class Configuration {
     int nowTicks;
     int hint;
     int hintTicks;
+    private int bid;
+    private int bm;
+    private int subid;
+    private int subm;
     private int minimumLoot;
     private double rareChance;
     private String startSound;
@@ -70,6 +74,10 @@ public class Configuration {
         stopSound = c.getString("endSound");
         rareChance = c.getDouble("rareChance", 1.0);
         minimumLoot = c.getInt("minimumLoot", 3);
+        bid = c.getInt("envoyBlockId", 54);
+        bm = c.getInt("envoyBlockMeta");
+        subid = c.getInt("rareEnvoyBlockId", 130);
+        subm = c.getInt("rareEnvoyBlockMeta");
     }
 
     boolean setEnvoy(Location loc) {
@@ -274,30 +282,29 @@ public class Configuration {
         nowTicks = c.getInt("duration");
         hintTicks = hint;
         now = true;
-        placeRandomEnvoys();
-        broadcast("start");
+        broadcast("start", placeRandomEnvoys());
     }
 
     void endEnvoy() {
         removeEnvoys();
         now = false;
-        broadcast("end");
+        broadcast("end", 0);
     }
 
-    private void broadcast(String mode) {
+    private void broadcast(String mode, int data) {
         switch (mode) {
             case "start":
-                pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.start"));
-                playsound(startSound);
+                pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.start") + data);
+                playSound(startSound);
                 break;
             case "end":
                 pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end"));
-                playsound(stopSound);
+                playSound(stopSound);
                 break;
         }
     }
 
-    private void playsound(String s) {
+    private void playSound(String s) {
         for (Player p : pl.getServer().getOnlinePlayers().values()) {
             PlaySoundPacket pk = new PlaySoundPacket();
             pk.name = s;
@@ -320,6 +327,8 @@ public class Configuration {
         for (Location loc : currentEnvoys.keySet()) {
             loc.getLevel().setBlock(loc, Block.get(0), true, false);
         }
+
+        currentEnvoys.clear();
     }
 
     private boolean rand() { //todo: use this to set super envoys
@@ -330,12 +339,31 @@ public class Configuration {
         return r.nextDouble(5) * chance > 2.0;
     }
 
-    private void placeRandomEnvoys() {
-        //todo: place, broadcast placed + count, set randoms
+    private int placeRandomEnvoys() {
+        int placed = 0;
+
         for (Location l : allEnvoys) {
-            /*if () {
-                currentEnvoys.put(l, rand());
-            }*/
+            if (r.nextBoolean()) {
+
+                placeEnvoy(l);
+                placed++;
+            }
         }
+
+        return placed;
+    }
+
+    private void placeEnvoy(Location loc) {
+        boolean isSuper = rand();
+
+        currentEnvoys.put(loc, isSuper);
+
+        if (isSuper) {
+            loc.getLevel().setBlock(loc, Block.get(subid, subm), true, false);
+        } else {
+            loc.getLevel().setBlock(loc, Block.get(bid, bm), true, false);
+        }
+
+        e.spawnPlacedEffect(loc, isSuper);
     }
 }
