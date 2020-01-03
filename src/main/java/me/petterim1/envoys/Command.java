@@ -43,6 +43,13 @@ public class Command extends cn.nukkit.command.Command {
                     pl.c.doEnvoy();
                 }
                 break;
+            case "stop":
+                if (!s.hasPermission("envoys.command.stop")) {
+                    s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.stop");
+                } else {
+                    pl.c.endEnvoy(false);
+                }
+                break;
             case "about":
                 s.sendMessage(Envoys.prefix + "\n\u00A76Version " + pl.getDescription().getVersion() + "\n\u00A76Created by PetteriM1\n\u00A76This plugin can be downloaded for free from nukkitx.com");
                 break;
@@ -81,6 +88,8 @@ public class Command extends cn.nukkit.command.Command {
         s.sendMessage("/envoys time - Show time left to next envoy");
         s.sendMessage("/envoys edit - Enter envoys edit mode");
         s.sendMessage("/envoys drops - Show list of locations envoys may spawn");
+        s.sendMessage("/envoys start - Start envoys event instantly");
+        s.sendMessage("/envoys stop - Stop envoys event instantly");
         s.sendMessage("/envoys about - Show about this plugin");
         s.sendMessage("/envoys help - Show this page");
     }

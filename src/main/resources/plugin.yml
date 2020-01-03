@@ -15,6 +15,9 @@ permissions:
   envoys.command.start:
     description: "Permission for /envoys start command"
     default: op
+  envoys.command.stop:
+    description: "Permission for /envoys stop command"
+    default: op
   envoys.command.drops:
     description: "Permission for /envoys drops command"
     default: op
