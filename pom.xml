@@ -8,12 +8,14 @@
     <artifactId>Envoys</artifactId>
     <version>1.0</version>
     <build>
+        <finalName>${project.artifactId}-${project.version}_${maven.build.timestamp}</finalName>
         <defaultGoal>install</defaultGoal>
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -47,5 +49,6 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.build.timestamp.format>ddMMyyyHHmmss</maven.build.timestamp.format>
     </properties>
 </project>

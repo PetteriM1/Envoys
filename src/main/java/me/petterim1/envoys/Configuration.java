@@ -331,7 +331,7 @@ public class Configuration {
         currentEnvoys.clear();
     }
 
-    private boolean rand() { //todo: use this to set super envoys
+    private boolean rand() {
         return r.nextDouble(10) * rareChance > 9.0;
     }
 
