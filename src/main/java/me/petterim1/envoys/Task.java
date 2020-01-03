@@ -17,12 +17,12 @@ public class Task extends Thread {
                 pl.c.doEnvoy();
             } else {
                 pl.c.nowTicks--;
-                pl.c.hintTicks--;
                 if (pl.c.nowTicks < 0) {
                     pl.c.endEnvoy(false);
                     return;
                 }
-                if (pl.c.hintTicks < 0) {
+                pl.c.hintTicks--;
+                if (pl.c.hintTicks == 0) {
                     pl.c.e.spawnRandomEffects();
                     pl.c.hintTicks = pl.c.hint;
                 }

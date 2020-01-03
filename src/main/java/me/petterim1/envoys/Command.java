@@ -40,14 +40,22 @@ public class Command extends cn.nukkit.command.Command {
                 if (!s.hasPermission("envoys.command.start")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.start");
                 } else {
-                    pl.c.doEnvoy();
+                    if (!pl.c.now) {
+                        pl.c.doEnvoy();
+                    } else {
+                        s.sendMessage(Envoys.prefix + pl.c.translate("command.start.alreadyrunning"));
+                    }
                 }
                 break;
             case "stop":
                 if (!s.hasPermission("envoys.command.stop")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.stop");
                 } else {
-                    pl.c.endEnvoy(false);
+                    if (pl.c.now) {
+                        pl.c.endEnvoy(false);
+                    } else {
+                        s.sendMessage(Envoys.prefix + pl.c.translate("command.stop.notrunning"));
+                    }
                 }
                 break;
             case "about":

@@ -126,7 +126,7 @@ public class Effects {
                 .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.SMALL_BALL.ordinal());
         tag.putCompound("Fireworks", new CompoundTag("Fireworks")
                 .putList(new ListTag<CompoundTag>("Explosions").add(ex))
-                .putByte("Flight", 1)
+                .putByte("Flight", 2)
         );
         i.setNamedTag(tag);
         return i;

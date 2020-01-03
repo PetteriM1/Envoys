@@ -188,7 +188,9 @@ public class Configuration {
 
             if (rawData != null) {
                 allEnvoys = getSaveData(rawData);
-                pl.getServer().getLogger().info(Envoys.prefix + "\u00A77Saved data loaded successfully");
+                if (allEnvoys.size() > 0) {
+                    pl.getServer().getLogger().info(Envoys.prefix + "\u00A77Saved data loaded successfully");
+                }
             } else {
                 pl.getServer().getLogger().info(Envoys.prefix + "\u00A77No saved data found");
             }
@@ -344,7 +346,7 @@ public class Configuration {
     }
 
     private boolean rand() {
-        return r.nextDouble(10) * rareChance > 9.0;
+        return r.nextDouble(10) * rareChance > 8.8;
     }
 
     private boolean rand(double chance) {
@@ -356,7 +358,6 @@ public class Configuration {
 
         for (Location l : allEnvoys) {
             if (r.nextBoolean()) {
-
                 placeEnvoy(l);
                 placed++;
             }
