@@ -3,13 +3,13 @@ package me.petterim1.envoys;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.enchantment.Enchantment;
 
-public class ItemSlot {
+class ItemSlot {
 
     public final Item item;
     public final double chance;
     public final boolean su;
 
-    public ItemSlot(double chance, boolean su, int id, int meta, int count, String name, int enchantment, int level) {
+    ItemSlot(double chance, boolean su, int id, int meta, int count, String name, int enchantment, int level) {
         Item item = Item.get(id, meta, count);
 
         if (!name.isEmpty()) {

@@ -49,86 +49,86 @@ public class Effects {
 
     Item getItem1() {
         Item i = new ItemFirework();
-        CompoundTag tag = new CompoundTag();
+        CompoundTag t = new CompoundTag();
         CompoundTag ex = new CompoundTag()
                 .putByteArray("FireworkColor", new byte[]{(byte) DyeColor.YELLOW.getDyeData()})
                 .putByteArray("FireworkFade", new byte[]{})
                 .putBoolean("FireworkFlicker", false)
                 .putBoolean("FireworkTrail", false)
                 .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.SMALL_BALL.ordinal());
-        tag.putCompound("Fireworks", new CompoundTag("Fireworks")
+        t.putCompound("Fireworks", new CompoundTag("Fireworks")
                 .putList(new ListTag<CompoundTag>("Explosions").add(ex))
                 .putByte("Flight", 1)
         );
-        i.setNamedTag(tag);
+        i.setNamedTag(t);
         return i;
     }
 
     Item getItem2() {
         Item i = new ItemFirework();
-        CompoundTag tag = new CompoundTag();
+        CompoundTag t = new CompoundTag();
         CompoundTag ex = new CompoundTag()
                 .putByteArray("FireworkColor", new byte[]{(byte) DyeColor.LIGHT_BLUE.getDyeData()})
                 .putByteArray("FireworkFade", new byte[]{})
                 .putBoolean("FireworkFlicker", false)
                 .putBoolean("FireworkTrail", false)
                 .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.SMALL_BALL.ordinal());
-        tag.putCompound("Fireworks", new CompoundTag("Fireworks")
+        t.putCompound("Fireworks", new CompoundTag("Fireworks")
                 .putList(new ListTag<CompoundTag>("Explosions").add(ex))
                 .putByte("Flight", 1)
         );
-        i.setNamedTag(tag);
+        i.setNamedTag(t);
         return i;
     }
 
     Item getItem3() {
         Item i = new ItemFirework();
-        CompoundTag tag = new CompoundTag();
+        CompoundTag t = new CompoundTag();
         CompoundTag ex = new CompoundTag()
                 .putByteArray("FireworkColor", new byte[]{(byte) DyeColor.RED.getDyeData()})
                 .putByteArray("FireworkFade", new byte[]{})
                 .putBoolean("FireworkFlicker", false)
                 .putBoolean("FireworkTrail", false)
                 .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.SMALL_BALL.ordinal());
-        tag.putCompound("Fireworks", new CompoundTag("Fireworks")
+        t.putCompound("Fireworks", new CompoundTag("Fireworks")
                 .putList(new ListTag<CompoundTag>("Explosions").add(ex))
                 .putByte("Flight", 1)
         );
-        i.setNamedTag(tag);
+        i.setNamedTag(t);
         return i;
     }
 
     Item getItem4() {
         Item i = new ItemFirework();
-        CompoundTag tag = new CompoundTag();
+        CompoundTag t = new CompoundTag();
         CompoundTag ex = new CompoundTag()
                 .putByteArray("FireworkColor", new byte[]{(byte) DyeColor.GREEN.getDyeData()})
                 .putByteArray("FireworkFade", new byte[]{})
                 .putBoolean("FireworkFlicker", false)
                 .putBoolean("FireworkTrail", false)
                 .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.SMALL_BALL.ordinal());
-        tag.putCompound("Fireworks", new CompoundTag("Fireworks")
+        t.putCompound("Fireworks", new CompoundTag("Fireworks")
                 .putList(new ListTag<CompoundTag>("Explosions").add(ex))
                 .putByte("Flight", 1)
         );
-        i.setNamedTag(tag);
+        i.setNamedTag(t);
         return i;
     }
 
     Item getItemHint() {
         Item i = new ItemFirework();
-        CompoundTag tag = new CompoundTag();
+        CompoundTag t = new CompoundTag();
         CompoundTag ex = new CompoundTag()
                 .putByteArray("FireworkColor", new byte[]{(byte) DyeColor.RED.getDyeData()})
                 .putByteArray("FireworkFade", new byte[]{})
                 .putBoolean("FireworkFlicker", false)
                 .putBoolean("FireworkTrail", false)
                 .putByte("FireworkType", ItemFirework.FireworkExplosion.ExplosionType.SMALL_BALL.ordinal());
-        tag.putCompound("Fireworks", new CompoundTag("Fireworks")
+        t.putCompound("Fireworks", new CompoundTag("Fireworks")
                 .putList(new ListTag<CompoundTag>("Explosions").add(ex))
                 .putByte("Flight", 2)
         );
-        i.setNamedTag(tag);
+        i.setNamedTag(t);
         return i;
     }
 

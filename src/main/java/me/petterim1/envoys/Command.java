@@ -106,6 +106,7 @@ public class Command extends cn.nukkit.command.Command {
         s.sendMessage("\u00A77In edit mode you can edit the locations where envoys can appear. The changes will take effect in the next envoy event.");
         s.sendMessage("\u00A75> \u00A77To set envoy location place a bedrock block.");
         s.sendMessage("\u00A75> \u00A77To delete envoy location break the bedrock block.");
+        s.sendMessage("\u00A75> \u00A77To quit edit mode run /envoys edit command again.");
         s.sendMessage("\u00A77Rare envoys will appear randomly at these locations. You can edit rare envoy chance in the config.");
     }
 }
