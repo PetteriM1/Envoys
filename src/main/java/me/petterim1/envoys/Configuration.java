@@ -29,7 +29,7 @@ public class Configuration {
     private double rareChance;
     private String startSound;
     private String stopSound;
-    private List<Location> allEnvoys = new ArrayList<>();
+    private List<Location> allEnvoys;
     private List<ItemSlot> items = new ArrayList<>();
     private List<EffectSlot> effects = new ArrayList<>();
     protected Map<Location, Boolean> currentEnvoys = new HashMap();
@@ -184,7 +184,14 @@ public class Configuration {
                 d.save();
             }
 
-            allEnvoys = (List<Location>) d.getList("envoys");
+            List<String> rawData = d.getStringList("envoys");
+
+            if (rawData != null) {
+                allEnvoys = getSaveData(rawData);
+                pl.getServer().getLogger().info(Envoys.prefix + "\u00A77Saved data loaded successfully");
+            } else {
+                pl.getServer().getLogger().info(Envoys.prefix + "\u00A77No saved data found");
+            }
         } catch (Exception e) {
             pl.getLogger().error("There was an error while loading saved data. Invalid data.yml file detected.", e);
         }
@@ -200,7 +207,7 @@ public class Configuration {
 
     void saveData() {
         if (loaded) {
-            d.set("envoys", allEnvoys);
+            d.set("envoys", getRawSaveData(allEnvoys));
             d.save();
         }
     }
@@ -239,7 +246,7 @@ public class Configuration {
 
     private void checkLastEnvoy() {
         if (currentEnvoys.size() <= 0) {
-            now = false;
+            endEnvoy(true);
         }
     }
 
@@ -285,10 +292,11 @@ public class Configuration {
         broadcast("start", placeRandomEnvoys());
     }
 
-    void endEnvoy() {
+    void endEnvoy(boolean allFound) {
         removeEnvoys();
+        resetTimer();
         now = false;
-        broadcast("end", 0);
+        broadcast("end", allFound ? 1 : 0);
     }
 
     private void broadcast(String mode, int data) {
@@ -298,7 +306,11 @@ public class Configuration {
                 playSound(startSound);
                 break;
             case "end":
-                pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end"));
+                if (data == 1) {
+                    pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end.allfound"));
+                } else  {
+                    pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end"));
+                }
                 playSound(stopSound);
                 break;
         }
@@ -371,5 +383,34 @@ public class Configuration {
         for (Location loc : allEnvoys) {
             loc.getLevel().setBlock(loc, Block.get(Block.BEDROCK), true, false);
         }
+    }
+
+    private List<String> getRawSaveData(List<Location> data) {
+        if (data == null) {
+            return null;
+        }
+
+        List<String> result = new ArrayList<>();
+
+        for (Location l : data) {
+            result.add(l.level.getName() + ':' + (int) l.x + ':' + (int) l.y + ':' + (int) l.z);
+        }
+
+        return result;
+    }
+
+    private List<Location> getSaveData(List<String> data) {
+        if (data == null) {
+            return null;
+        }
+
+        List<Location> result = new ArrayList<>();
+
+        for (String s : data) {
+            String[] raw = s.split(":");
+            result.add(new Location(Double.parseDouble(raw[1]), Double.parseDouble(raw[2]), Double.parseDouble(raw[3]), pl.getServer().getLevelByName(raw[0])));
+        }
+
+        return result;
     }
 }

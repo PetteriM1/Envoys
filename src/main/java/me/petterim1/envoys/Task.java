@@ -19,7 +19,7 @@ public class Task extends Thread {
                 pl.c.nowTicks--;
                 pl.c.hintTicks--;
                 if (pl.c.nowTicks < 0) {
-                    pl.c.endEnvoy();
+                    pl.c.endEnvoy(false);
                     return;
                 }
                 if (pl.c.hintTicks < 0) {

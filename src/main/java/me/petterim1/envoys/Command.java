@@ -50,7 +50,7 @@ public class Command extends cn.nukkit.command.Command {
                 if (!s.hasPermission("envoys.command.drops")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.drops");
                 } else {
-                    s.sendMessage(Envoys.prefix + pl.c.translate("command.drops.locations") + pl.c.getLocations());
+                    s.sendMessage(Envoys.prefix + pl.c.translate("command.drops.locations") + '\n' + pl.c.getLocations());
                 }
                 break;
             case "edit":
