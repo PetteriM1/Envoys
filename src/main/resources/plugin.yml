@@ -1,6 +1,23 @@
 name: Envoys
 main: me.petterim1.envoys.Envoys
 version: "${pom.version}"
-api: ["1.0.0"]
+api: ["1.0.9"]
 author: PetteriM1
 description: Envoys plugin for Nukkit
+
+permissions:
+  envoys.command.main:
+    description: "Permission for /envoys command and all its sub-commands if not overwritten by other permissions"
+    default: true
+  envoys.command.time:
+    description: "Permission for /envoys time command"
+    default: true
+  envoys.command.start:
+    description: "Permission for /envoys start command"
+    default: op
+  envoys.command.drops:
+    description: "Permission for /envoys drops command"
+    default: op
+  envoys.command.edit:
+    description: "Permission for /envoys edit command"
+    default: op

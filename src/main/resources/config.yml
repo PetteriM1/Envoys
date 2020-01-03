@@ -36,6 +36,7 @@ endSound: "beacon.power"
 # Translations
 envoy.set: "§aEnvoy set"
 envoy.delete: "§aEnvoy deleted"
+command.noperm: "§cYou don't have permission to use this command. Missing permission: §6"
 command.ingame: "§cThis command can be only used in game"
 command.time.left: "§6Time to next envoy: "
 command.editmode.enabled: "§aEdit mode enabled"

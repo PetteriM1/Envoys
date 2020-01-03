@@ -184,7 +184,7 @@ public class Configuration {
                 d.save();
             }
 
-            allEnvoys = (List<Location>) d.getList("envoys"); //TODO: test
+            allEnvoys = (List<Location>) d.getList("envoys");
         } catch (Exception e) {
             pl.getLogger().error("There was an error while loading saved data. Invalid data.yml file detected.", e);
         }
@@ -318,7 +318,7 @@ public class Configuration {
     }
 
     private void checkLicense() {
-        if (!pl.getDescription().getAuthors().get(0).equals("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys")) {
+        if (!pl.getDescription().getAuthors().get(0).equals("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys") || !pl.getDescription().getDescription().equals("Envoys plugin for Nukkit")) {
             System.exit(1);
         }
     }
