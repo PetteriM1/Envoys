@@ -48,6 +48,7 @@ public class Command extends cn.nukkit.command.Command { //TODO: perms
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.editmode.disabled"));
                 } else {
                     pl.editmode.add(s.getName());
+                    pl.c.setEditmodeBlocks();
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.editmode.enabled"));
                     showEditmodeHelp(s);
                 }
@@ -62,14 +63,15 @@ public class Command extends cn.nukkit.command.Command { //TODO: perms
     private static void showHelp(CommandSender s) {
         s.sendMessage(Envoys.prefix);
         s.sendMessage("/envoys time - Show time left to next envoy");
-        s.sendMessage("/envoys edit - Enter envoys setup mode");
+        s.sendMessage("/envoys edit - Enter envoys edit mode");
         s.sendMessage("/envoys drops - Show list of locations envoys may spawn");
         s.sendMessage("/envoys about - Show about this plugin");
         s.sendMessage("/envoys help - Show this page");
     }
 
     private static void showEditmodeHelp(CommandSender s) {
-        s.sendMessage("DEBUG: showEditmodeHelp");
-        //TODO
+        s.sendMessage("\u00A77In edit mode you can edit the locations where envoys can appear. The changes will take effect in the next envoy event.");
+        s.sendMessage("\u00A75> \u00A77To set envoy location place a bedrock block.");
+        s.sendMessage("\u00A75> \u00A77To delete envoy location break the bedrock block.");
     }
 }

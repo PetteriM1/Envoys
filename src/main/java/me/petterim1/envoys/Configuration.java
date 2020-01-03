@@ -366,4 +366,10 @@ public class Configuration {
 
         e.spawnPlacedEffect(loc, isSuper);
     }
+
+    void setEditmodeBlocks() {
+        for (Location loc : allEnvoys) {
+            loc.getLevel().setBlock(loc, Block.get(Block.BEDROCK), true, false);
+        }
+    }
 }
