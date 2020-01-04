@@ -9,19 +9,19 @@ class ItemSlot {
     public final double chance;
     public final boolean su;
 
-    ItemSlot(double chance, boolean su, int id, int meta, int count, String name, int enchantment, int level) {
-        Item item = Item.get(id, meta, count);
+    ItemSlot(double ch, boolean su, int id, int me, int co, String na, int en, int le) {
+        Item i = Item.get(id, me, co);
 
-        if (!name.isEmpty()) {
-            item.setCustomName(name);
+        if (!na.isEmpty()) {
+            i.setCustomName(na);
         }
 
-        if (enchantment > -1 && level > 0) {
-            item.addEnchantment(Enchantment.get(enchantment).setLevel(level));
+        if (en > -1 && le > 0) {
+            i.addEnchantment(Enchantment.get(en).setLevel(le));
         }
 
-        this.item = item;
-        this.chance = chance;
+        this.item = i;
+        this.chance = ch;
         this.su = su;
     }
 }

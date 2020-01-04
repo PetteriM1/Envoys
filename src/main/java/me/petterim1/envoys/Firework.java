@@ -14,10 +14,10 @@ public class Firework extends EntityFirework {
 
     Envoys pl;
 
-    public Firework(Envoys pl, byte mode, FullChunk chunk, CompoundTag nbt) {
-        super(chunk, nbt);
+    public Firework(Envoys pl, byte m, FullChunk c, CompoundTag t) {
+        super(c, t);
         this.pl = pl;
-        switch (mode) {
+        switch (m) {
             case 1:
                 setDataProperty(new NBTEntityData(Entity.DATA_DISPLAY_ITEM, pl.c.e.getItem1().getNamedTag()));
                 break;
@@ -31,6 +31,7 @@ public class Firework extends EntityFirework {
                 setDataProperty(new NBTEntityData(Entity.DATA_DISPLAY_ITEM, pl.c.e.getItem4().getNamedTag()));
                 break;
         }
+
         this.setDataProperty(new IntEntityData(Entity.DATA_DISPLAY_OFFSET, 1));
         this.setDataProperty(new ByteEntityData(Entity.DATA_HAS_DISPLAY, 1));
     }

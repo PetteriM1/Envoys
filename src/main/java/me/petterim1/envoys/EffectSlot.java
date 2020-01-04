@@ -8,9 +8,9 @@ class EffectSlot {
     public final double chance;
     public final boolean su;
 
-    EffectSlot(double chance, boolean su, int id, int amplifier, int duration) {
-        this.effect = Effect.getEffect(id).setAmplifier(amplifier).setDuration(duration);
-        this.chance = chance;
+    EffectSlot(double ch, boolean su, int id, int am, int du) {
+        this.effect = Effect.getEffect(id).setAmplifier(am).setDuration(du);
+        this.chance = ch;
         this.su = su;
     }
 }

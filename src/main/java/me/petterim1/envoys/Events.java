@@ -17,7 +17,7 @@ public class Events implements Listener {
 
     @EventHandler
     public void onBreak(BlockBreakEvent e) {
-        if (pl.editmode.contains(e.getPlayer().getName())) {
+        if (pl.c.editMode.contains(e.getPlayer().getName())) {
             if (BlockID.BEDROCK == e.getBlock().getId()) {
                 if (pl.c.delEnvoy(e.getBlock().getLocation())) {
                     e.getPlayer().sendMessage(Envoys.prefix + pl.c.translate("envoy.delete"));
@@ -31,7 +31,7 @@ public class Events implements Listener {
 
     @EventHandler
     public void onPlace(BlockPlaceEvent e) {
-        if (pl.editmode.contains(e.getPlayer().getName())) {
+        if (pl.c.editMode.contains(e.getPlayer().getName())) {
             if (BlockID.BEDROCK == e.getBlock().getId()) {
                 if (pl.c.setEnvoy(e.getBlock().getLocation())) {
                     e.getPlayer().sendMessage(Envoys.prefix + pl.c.translate("envoy.set"));

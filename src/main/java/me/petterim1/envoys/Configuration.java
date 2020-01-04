@@ -2,6 +2,7 @@ package me.petterim1.envoys;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Location;
 import cn.nukkit.network.protocol.PlaySoundPacket;
 import cn.nukkit.utils.Config;
@@ -16,11 +17,13 @@ public class Configuration {
     private Config d;
     private static final int c_ver = 1;
     boolean loaded;
-    boolean now;
+    static boolean now;
     int nextEnvoy;
     int nowTicks;
     int hint;
     int hintTicks;
+    String titleBasic;
+    String titleSuper;
     private int bid;
     private int bm;
     private int subid;
@@ -29,6 +32,7 @@ public class Configuration {
     private double rareChance;
     private String startSound;
     private String stopSound;
+    List<String> editMode = new ArrayList<>();
     private List<Location> allEnvoys;
     private List<ItemSlot> items = new ArrayList<>();
     private List<EffectSlot> effects = new ArrayList<>();
@@ -78,18 +82,21 @@ public class Configuration {
         bm = c.getInt("envoyBlockMeta");
         subid = c.getInt("rareEnvoyBlockId", 130);
         subm = c.getInt("rareEnvoyBlockMeta");
+        titleBasic = c.getString("title.basic", "§7Basic Envoy");
+        titleSuper = c.getString("title.super", "§7Super Envoy");
     }
 
-    boolean setEnvoy(Location loc) {
-        if (allEnvoys.contains(loc)) {
+    boolean setEnvoy(Location l) {
+        if (allEnvoys.contains(l)) {
             return false;
         }
-        allEnvoys.add(loc);
+
+        allEnvoys.add(l);
         return true;
     }
 
-    boolean delEnvoy(Location loc) {
-        return allEnvoys.remove(loc);
+    boolean delEnvoy(Location l) {
+        return allEnvoys.remove(l);
     }
 
     String translate(String s) {
@@ -109,54 +116,54 @@ public class Configuration {
             for (String s : i.getStringList("itemsNormal")) {
                 String[] info = s.split(":");
                 String name;
-                int enchantment;
-                int level;
+                int enc;
+                int lvl;
                 if (info.length > 4 && info[4] != null) {
                     if (info.length > 6 && info[6] != null) {
                         name = info[4];
-                        enchantment = Integer.parseInt(info[5]);
-                        level = Integer.parseInt(info[6]);
+                        enc = Integer.parseInt(info[5]);
+                        lvl = Integer.parseInt(info[6]);
                     } else if (info.length > 5 && info[5] != null) {
                         name = "";
-                        enchantment = Integer.parseInt(info[4]);
-                        level = Integer.parseInt(info[5]);
+                        enc = Integer.parseInt(info[4]);
+                        lvl = Integer.parseInt(info[5]);
                     } else {
                         name = info[4];
-                        enchantment = -1;
-                        level = -1;
+                        enc = -1;
+                        lvl = -1;
                     }
                 } else {
                     name = "";
-                    enchantment = -1;
-                    level = -1;
+                    enc = -1;
+                    lvl = -1;
                 }
-                items.add(new ItemSlot(Double.parseDouble(info[3]), false, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enchantment, level));
+                items.add(new ItemSlot(Double.parseDouble(info[3]), false, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enc, lvl));
             }
             for (String s : i.getStringList("itemsSuper")) {
                 String[] info = s.split(":");
                 String name;
-                int enchantment;
-                int level;
+                int enc;
+                int lvl;
                 if (info.length > 4 && info[4] != null) {
                     if (info.length > 6 && info[6] != null) {
                         name = info[4];
-                        enchantment = Integer.parseInt(info[5]);
-                        level = Integer.parseInt(info[6]);
+                        enc = Integer.parseInt(info[5]);
+                        lvl = Integer.parseInt(info[6]);
                     } else if (info.length > 5 && info[5] != null) {
                         name = "";
-                        enchantment = Integer.parseInt(info[4]);
-                        level = Integer.parseInt(info[5]);
+                        enc = Integer.parseInt(info[4]);
+                        lvl = Integer.parseInt(info[5]);
                     } else {
                         name = info[4];
-                        enchantment = -1;
-                        level = -1;
+                        enc = -1;
+                        lvl = -1;
                     }
                 } else {
                     name = "";
-                    enchantment = -1;
-                    level = -1;
+                    enc = -1;
+                    lvl = -1;
                 }
-                items.add(new ItemSlot(Double.parseDouble(info[3]), true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enchantment, level));
+                items.add(new ItemSlot(Double.parseDouble(info[3]), true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enc, lvl));
             }
             for (String s : i.getStringList("effectsNormal")) {
                 String[] info = s.split(":");
@@ -216,33 +223,33 @@ public class Configuration {
 
     String getLocations() {
         StringBuilder str = new StringBuilder();
-        for (Location loc : allEnvoys) {
-            str.append(loc.x).append(", ").append(loc.y).append(", ").append(loc.z).append(", ").append(loc.level.getName()).append('\n');
+        for (Location l : allEnvoys) {
+            str.append(l.x).append(", ").append(l.y).append(", ").append(l.z).append(", ").append(l.level.getName()).append('\n');
         }
         return str.toString();
     }
 
     void quitEditmode() {
-        for (Location loc : allEnvoys) {
-            loc.getLevel().setBlock(loc, Block.get(0), true, false);
+        for (Location l : allEnvoys) {
+            l.getLevel().setBlock(l, Block.get(0), true, false);
         }
     }
 
-    boolean isEnvoyAt(Location loc) {
+    boolean isEnvoyAt(Location l) {
         if (!now) {
             return false;
         }
 
-        return currentEnvoys.containsKey(loc);
+        return currentEnvoys.containsKey(l);
     }
 
-    void claimEnvoy(Player p, Location loc) {
-        loc.getLevel().setBlock(loc, Block.get(0), true, false);
-        boolean isSuper = currentEnvoys.get(loc);
-        currentEnvoys.remove(loc);
-        e.spawnOpenEffect(isSuper, loc);
-        giveItems(p, isSuper);
-        giveEffects(p, isSuper);
+    void claimEnvoy(Player p, Location l) {
+        l.getLevel().setBlock(l, Block.get(0), true, false);
+        boolean su = currentEnvoys.get(l);
+        currentEnvoys.remove(l);
+        e.spawnOpenEffect(su, l);
+        giveItems(p, su);
+        giveEffects(p, su);
         checkLastEnvoy();
     }
 
@@ -253,37 +260,37 @@ public class Configuration {
     }
 
     private void giveItems(Player p, boolean su) {
-        StringBuilder names = new StringBuilder();
+        StringBuilder n = new StringBuilder();
         int itemsGiven = 0;
         while (itemsGiven < minimumLoot) {
             for (ItemSlot slot : items) {
                 if ((su && !slot.su) || (!su && slot.su)) {
                     if (rand(slot.chance)) {
-                        names.append('[').append(slot.item.getName()).append(']');
+                        n.append('[').append(slot.item.getName()).append(']');
                         p.getInventory().addItem(slot.item);
                         itemsGiven++;
                     }
                 }
             }
         }
-        p.sendMessage(Envoys.prefix + translate("items.given") + names);
+        p.sendMessage(Envoys.prefix + translate("items.given") + n);
     }
 
     private void giveEffects(Player p, boolean su) {
-        StringBuilder names = new StringBuilder();
+        StringBuilder n = new StringBuilder();
         int given = 0;
         while (given < Math.min(1, effects.size())) {
             for (EffectSlot slot : effects) {
                 if ((su && !slot.su) || (!su && slot.su)) {
                     if (rand(slot.chance)) {
-                        names.append('[').append(slot.effect.getName()).append(']');
+                        n.append('[').append(slot.effect.getName()).append(']');
                         slot.effect.add(p);
                         given++;
                     }
                 }
             }
         }
-        p.sendMessage(Envoys.prefix + translate("effects.given") + names);
+        p.sendMessage(Envoys.prefix + translate("effects.given") + n);
     }
 
     void doEnvoy() {
@@ -294,21 +301,21 @@ public class Configuration {
         broadcast("start", placeRandomEnvoys());
     }
 
-    void endEnvoy(boolean allFound) {
-        removeEnvoys();
+    void endEnvoy(boolean af) {
         resetTimer();
         now = false;
-        broadcast("end", allFound ? 1 : 0);
+        removeEnvoys();
+        broadcast("end", af ? 1 : 0);
     }
 
-    private void broadcast(String mode, int data) {
-        switch (mode) {
+    private void broadcast(String m, int d) {
+        switch (m) {
             case "start":
-                pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.start") + data);
+                pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.start") + d);
                 playSound(startSound);
                 break;
             case "end":
-                if (data == 1) {
+                if (d == 1) {
                     pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end.allfound"));
                 } else  {
                     pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end"));
@@ -332,14 +339,20 @@ public class Configuration {
     }
 
     private void checkLicense() {
-        if (!pl.getDescription().getAuthors().get(0).equals("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys") || !pl.getDescription().getDescription().equals("Envoys plugin for Nukkit")) {
+        if (pl.getDescription().getAuthors().size() != 1 || !pl.getDescription().getAuthors().get(0).equals("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys") || !pl.getDescription().getDescription().equals("Envoys plugin for Nukkit")) {
             System.exit(1);
         }
     }
 
     void removeEnvoys() {
-        for (Location loc : currentEnvoys.keySet()) {
-            loc.getLevel().setBlock(loc, Block.get(0), true, false);
+        for (Location l : currentEnvoys.keySet()) {
+            l.getLevel().setBlock(l, Block.get(0), true, false);
+
+            for (Entity e : l.getChunk().getEntities().values()) {
+                if (e instanceof Hologram) {
+                    e.close();
+                }
+            }
         }
 
         currentEnvoys.clear();
@@ -349,40 +362,41 @@ public class Configuration {
         return r.nextDouble(10) * rareChance > 8.8;
     }
 
-    private boolean rand(double chance) {
-        return r.nextDouble(5) * chance > 2.0;
+    private boolean rand(double c) {
+        return r.nextDouble(5) * c > 2.0;
     }
 
     private int placeRandomEnvoys() {
-        int placed = 0;
+        int c = 0;
 
         for (Location l : allEnvoys) {
             if (r.nextBoolean()) {
                 placeEnvoy(l);
-                placed++;
+                c++;
             }
         }
 
-        return placed;
+        return c;
     }
 
-    private void placeEnvoy(Location loc) {
-        boolean isSuper = rand();
+    private void placeEnvoy(Location l) {
+        boolean su = rand();
 
-        currentEnvoys.put(loc, isSuper);
+        currentEnvoys.put(l, su);
 
-        if (isSuper) {
-            loc.getLevel().setBlock(loc, Block.get(subid, subm), true, false);
+        if (su) {
+            l.getLevel().setBlock(l, Block.get(subid, subm), true, false);
         } else {
-            loc.getLevel().setBlock(loc, Block.get(bid, bm), true, false);
+            l.getLevel().setBlock(l, Block.get(bid, bm), true, false);
         }
 
-        e.spawnPlacedEffect(loc, isSuper);
+        e.spawnHologram(l, su);
+        e.spawnPlacedEffect(l, su);
     }
 
-    void setEditmodeBlocks() {
-        for (Location loc : allEnvoys) {
-            loc.getLevel().setBlock(loc, Block.get(Block.BEDROCK), true, false);
+    void setEditModeBlocks() {
+        for (Location l : allEnvoys) {
+            l.getLevel().setBlock(l, Block.get(Block.BEDROCK), true, false);
         }
     }
 

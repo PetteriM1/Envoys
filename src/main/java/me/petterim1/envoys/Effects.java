@@ -1,5 +1,6 @@
 package me.petterim1.envoys;
 
+import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFirework;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemFirework;
@@ -19,32 +20,39 @@ public class Effects {
         this.pl = pl;
     }
 
-    void spawnOpenEffect(boolean e, Location loc) {
+    void spawnOpenEffect(boolean e, Location l) {
         if (e) {
-            new Firework(pl, (byte) 3, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
-            new Firework(pl, (byte) 4, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+            new Firework(pl, (byte) 3, l.getLevel().getChunk(l.getFloorX() >> 4, l.getFloorZ() >> 4), getNBT(l)).spawnToAll();
+            new Firework(pl, (byte) 4, l.getLevel().getChunk(l.getFloorX() >> 4, l.getFloorZ() >> 4), getNBT(l)).spawnToAll();
         } else {
-            new Firework(pl, (byte) 1, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
-            new Firework(pl, (byte) 2, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+            new Firework(pl, (byte) 1, l.getLevel().getChunk(l.getFloorX() >> 4, l.getFloorZ() >> 4), getNBT(l)).spawnToAll();
+            new Firework(pl, (byte) 2, l.getLevel().getChunk(l.getFloorX() >> 4, l.getFloorZ() >> 4), getNBT(l)).spawnToAll();
         }
 
-        loc.getLevel().addLevelSoundEvent(loc, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, EntityFirework.NETWORK_ID);
+        l.getLevel().addLevelSoundEvent(l, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, EntityFirework.NETWORK_ID);
     }
 
     void spawnRandomEffects() {
-        for (Location loc : pl.c.currentEnvoys.keySet()) {
-            EntityFirework f = new EntityFirework(loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc));
+        for (Location l : pl.c.currentEnvoys.keySet()) {
+            EntityFirework f = new EntityFirework(l.getLevel().getChunk(l.getFloorX() >> 4, l.getFloorZ() >> 4), getNBT(l));
             f.setFirework(getItemHint());
             f.spawnToAll();
         }
     }
 
-    void spawnPlacedEffect(Location loc, boolean su) {
-        new Firework(pl, (byte) 4, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+    void spawnPlacedEffect(Location l, boolean su) {
+        new Firework(pl, (byte) 4, l.getLevel().getChunk(l.getFloorX() >> 4, l.getFloorZ() >> 4), getNBT(l)).spawnToAll();
 
         if (su) {
-            new Firework(pl, (byte) 2, loc.getLevel().getChunk(loc.getFloorX() >> 4, loc.getFloorZ() >> 4), getNBT(loc)).spawnToAll();
+            new Firework(pl, (byte) 2, l.getLevel().getChunk(l.getFloorX() >> 4, l.getFloorZ() >> 4), getNBT(l)).spawnToAll();
         }
+    }
+
+    void spawnHologram(Location l, boolean su) {
+        Entity h = Entity.createEntity("EnvoysHologramEntity", l.getChunk(), getNBT(l, su ? pl.c.titleSuper : pl.c.titleBasic));
+        h.setNameTag(su ? pl.c.titleSuper : pl.c.titleBasic);
+        h.setNameTagAlwaysVisible();
+        h.spawnToAll();
     }
 
     Item getItem1() {
@@ -132,12 +140,12 @@ public class Effects {
         return i;
     }
 
-    private static CompoundTag getNBT(Location loc) {
+    private static CompoundTag getNBT(Location l) {
         return new CompoundTag()
                 .putList(new ListTag<DoubleTag>("Pos")
-                        .add(new DoubleTag("", loc.x + 0.5))
-                        .add(new DoubleTag("", loc.y + 0.5))
-                        .add(new DoubleTag("", loc.z + 0.5)))
+                        .add(new DoubleTag("", l.x + 0.5))
+                        .add(new DoubleTag("", l.y + 0.5))
+                        .add(new DoubleTag("", l.z + 0.5)))
                 .putList(new ListTag<DoubleTag>("Motion")
                         .add(new DoubleTag("", 0))
                         .add(new DoubleTag("", 0))
@@ -145,5 +153,23 @@ public class Effects {
                 .putList(new ListTag<FloatTag>("Rotation")
                         .add(new FloatTag("", 0))
                         .add(new FloatTag("", 0)));
+    }
+
+    private static CompoundTag getNBT(Location l, String n) {
+        return new CompoundTag()
+                .putList(new ListTag<DoubleTag>("Pos")
+                        .add(new DoubleTag("", l.x + 0.5))
+                        .add(new DoubleTag("", l.y + 0.5))
+                        .add(new DoubleTag("", l.z + 0.5)))
+                .putList(new ListTag<DoubleTag>("Motion")
+                        .add(new DoubleTag("", 0))
+                        .add(new DoubleTag("", 0))
+                        .add(new DoubleTag("", 0)))
+                .putList(new ListTag<FloatTag>("Rotation")
+                        .add(new FloatTag("", 0))
+                        .add(new FloatTag("", 0)))
+                .putBoolean("Invulnerable", true)
+                .putString("NameTag", n)
+                .putFloat("Scale", 0.001f);
     }
 }

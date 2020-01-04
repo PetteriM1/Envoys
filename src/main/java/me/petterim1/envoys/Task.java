@@ -13,7 +13,7 @@ public class Task extends Thread {
     public void run() {
         pl.c.nextEnvoy--;
         if (pl.c.nextEnvoy < 0) {
-            if (!pl.c.now) {
+            if (!Configuration.now) {
                 pl.c.doEnvoy();
             } else {
                 pl.c.nowTicks--;

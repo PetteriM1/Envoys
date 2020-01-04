@@ -40,7 +40,7 @@ public class Command extends cn.nukkit.command.Command {
                 if (!s.hasPermission("envoys.command.start")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.start");
                 } else {
-                    if (!pl.c.now) {
+                    if (!Configuration.now) {
                         pl.c.doEnvoy();
                     } else {
                         s.sendMessage(Envoys.prefix + pl.c.translate("command.start.alreadyrunning"));
@@ -51,7 +51,7 @@ public class Command extends cn.nukkit.command.Command {
                 if (!s.hasPermission("envoys.command.stop")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.stop");
                 } else {
-                    if (pl.c.now) {
+                    if (Configuration.now) {
                         pl.c.endEnvoy(false);
                     } else {
                         s.sendMessage(Envoys.prefix + pl.c.translate("command.stop.notrunning"));
@@ -72,13 +72,13 @@ public class Command extends cn.nukkit.command.Command {
                 if (!s.hasPermission("envoys.command.edit")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.edit");
                 } else {
-                    if (pl.editmode.contains(s.getName())) {
-                        pl.editmode.remove(s.getName());
+                    if (pl.c.editMode.contains(s.getName())) {
+                        pl.c.editMode.remove(s.getName());
                         pl.c.quitEditmode();
                         s.sendMessage(Envoys.prefix + pl.c.translate("command.editmode.disabled"));
                     } else {
-                        pl.editmode.add(s.getName());
-                        pl.c.setEditmodeBlocks();
+                        pl.c.editMode.add(s.getName());
+                        pl.c.setEditModeBlocks();
                         s.sendMessage(Envoys.prefix + pl.c.translate("command.editmode.enabled"));
                         showEditModeHelp(s);
                     }
@@ -93,7 +93,7 @@ public class Command extends cn.nukkit.command.Command {
 
     private static void showHelp(CommandSender s) {
         s.sendMessage(Envoys.prefix);
-        s.sendMessage("/envoys time - Show time left to next envoy");
+        s.sendMessage("/envoys time - Show time left to next envoys event");
         s.sendMessage("/envoys edit - Enter envoys edit mode");
         s.sendMessage("/envoys drops - Show list of locations envoys may spawn");
         s.sendMessage("/envoys start - Start envoys event instantly");
@@ -106,7 +106,7 @@ public class Command extends cn.nukkit.command.Command {
         s.sendMessage("\u00A77In edit mode you can edit the locations where envoys can appear. The changes will take effect in the next envoy event.");
         s.sendMessage("\u00A75> \u00A77To set envoy location place a bedrock block.");
         s.sendMessage("\u00A75> \u00A77To delete envoy location break the bedrock block.");
-        s.sendMessage("\u00A75> \u00A77To quit edit mode run /envoys edit command again.");
+        s.sendMessage("\u00A75> \u00A77To quit the edit mode run /envoys edit command again.");
         s.sendMessage("\u00A77Rare envoys will appear randomly at these locations. You can edit rare envoy chance in the config.");
     }
 }
