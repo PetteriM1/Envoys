@@ -3,9 +3,6 @@ package me.petterim1.envoys;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.plugin.PluginBase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Envoys extends PluginBase {
 
     Configuration c;

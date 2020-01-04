@@ -25,18 +25,4 @@ public class Hologram extends Entity {
             super.spawnTo(p);
         }
     }
-
-    @Override
-    public void kill() {
-        if (!Configuration.now) {
-            super.close();
-        }
-    }
-
-    @Override
-    public void close() {
-        if (!Configuration.now) {
-            super.close();
-        }
-    }
 }

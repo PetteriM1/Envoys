@@ -49,7 +49,7 @@ public class Effects {
     }
 
     void spawnHologram(Location l, boolean su) {
-        Entity h = Entity.createEntity("EnvoysHologramEntity", l.getChunk(), getNBT(l, su ? pl.c.titleSuper : pl.c.titleBasic));
+        Entity h = new Hologram(l.getChunk(), getNBT(l, su ? pl.c.titleSuper : pl.c.titleBasic));
         h.setNameTag(su ? pl.c.titleSuper : pl.c.titleBasic);
         h.setNameTagAlwaysVisible();
         h.spawnToAll();
