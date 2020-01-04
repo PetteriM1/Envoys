@@ -245,6 +245,7 @@ public class Configuration {
 
     void claimEnvoy(Player p, Location l) {
         l.getLevel().setBlock(l, Block.get(0), true, false);
+        removeHolograms(l);
         boolean su = currentEnvoys.get(l);
         currentEnvoys.remove(l);
         e.spawnOpenEffect(su, l);
@@ -256,6 +257,14 @@ public class Configuration {
     private void checkLastEnvoy() {
         if (currentEnvoys.size() <= 0) {
             endEnvoy(true);
+        }
+    }
+
+    private void removeHolograms(Location l) {
+        for (Entity e : l.getChunk().getEntities().values()) {
+            if (e instanceof Hologram) {
+                e.close();
+            }
         }
     }
 
@@ -347,12 +356,7 @@ public class Configuration {
     void removeEnvoys() {
         for (Location l : currentEnvoys.keySet()) {
             l.getLevel().setBlock(l, Block.get(0), true, false);
-
-            for (Entity e : l.getChunk().getEntities().values()) {
-                if (e instanceof Hologram) {
-                    e.close();
-                }
-            }
+            removeHolograms(l);
         }
 
         currentEnvoys.clear();
