@@ -36,7 +36,8 @@ public class Configuration {
     private List<Location> allEnvoys;
     private List<ItemSlot> items = new ArrayList<>();
     private List<EffectSlot> effects = new ArrayList<>();
-    protected Map<Location, Boolean> currentEnvoys = new HashMap();
+    protected Map<Location, Boolean> currentEnvoys = new HashMap<>();
+    private Map<Location, Long> hologramIDs = new HashMap<>();
     private static final SplittableRandom r = new SplittableRandom();
 
     Configuration(Envoys pl, Config c) {
@@ -245,7 +246,7 @@ public class Configuration {
 
     void claimEnvoy(Player p, Location l) {
         l.getLevel().setBlock(l, Block.get(0), true, false);
-        removeHolograms(l);
+        removeHolograms(l, false);
         boolean su = currentEnvoys.get(l);
         currentEnvoys.remove(l);
         e.spawnOpenEffect(su, l);
@@ -260,8 +261,16 @@ public class Configuration {
         }
     }
 
-    private void removeHolograms(Location l) {
-        for (Entity e : l.getChunk().getEntities().values()) {
+    private void removeHolograms(Location l, boolean a) {
+        if (a) {
+            for (long v : hologramIDs.values()) {
+                Entity e = l.getLevel().getEntity(v);
+                if (e instanceof Hologram) {
+                    e.close();
+                }
+            }
+        } else {
+            Entity e = l.getLevel().getEntity(hologramIDs.get(l));
             if (e instanceof Hologram) {
                 e.close();
             }
@@ -356,10 +365,11 @@ public class Configuration {
     void removeEnvoys() {
         for (Location l : currentEnvoys.keySet()) {
             l.getLevel().setBlock(l, Block.get(0), true, false);
-            removeHolograms(l);
+            removeHolograms(l, true);
         }
 
         currentEnvoys.clear();
+        hologramIDs.clear();
     }
 
     private boolean rand() {
@@ -394,7 +404,7 @@ public class Configuration {
             l.getLevel().setBlock(l, Block.get(bid, bm), true, false);
         }
 
-        e.spawnHologram(l, su);
+        hologramIDs.put(l, e.spawnHologram(l, su));
         e.spawnPlacedEffect(l, su);
     }
 
