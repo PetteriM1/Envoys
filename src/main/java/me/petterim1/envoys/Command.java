@@ -84,6 +84,13 @@ public class Command extends cn.nukkit.command.Command {
                     }
                 }
                 break;
+            case "left":
+                if (!s.hasPermission("envoys.command.left")) {
+                    s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.left");
+                } else {
+
+                }
+                break;
             default:
                 showHelp(s);
         }
@@ -96,6 +103,7 @@ public class Command extends cn.nukkit.command.Command {
         s.sendMessage("/envoys time - Show time left to next envoys event");
         s.sendMessage("/envoys edit - Enter envoys edit mode");
         s.sendMessage("/envoys drops - Show list of locations envoys may spawn");
+        s.sendMessage("/envoys left - Show list of locations envoys are spawned at");
         s.sendMessage("/envoys start - Start envoys event instantly");
         s.sendMessage("/envoys stop - Stop envoys event instantly");
         s.sendMessage("/envoys about - Show about this plugin");

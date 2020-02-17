@@ -6,7 +6,7 @@
 
     <groupId>me.petterim1.envoys</groupId>
     <artifactId>Envoys</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <build>
         <finalName>${project.artifactId}-${project.version}_${maven.build.timestamp}</finalName>
         <defaultGoal>install</defaultGoal>

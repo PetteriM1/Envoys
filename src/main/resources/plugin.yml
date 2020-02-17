@@ -24,3 +24,6 @@ permissions:
   envoys.command.edit:
     description: "Permission for /envoys edit command"
     default: op
+  envoys.command.left:
+    description: "Permission for /envoys left command"
+    default: op

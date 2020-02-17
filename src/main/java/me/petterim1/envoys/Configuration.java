@@ -15,7 +15,8 @@ public class Configuration {
     Effects e;
     private Config c;
     private Config d;
-    private static final int c_ver = 1;
+    private static final int c_ver = 2;
+    private static final int c_ver_i = 1;
     boolean loaded;
     static boolean now;
     int nextEnvoy;
@@ -29,6 +30,8 @@ public class Configuration {
     private int subid;
     private int subm;
     private int minimumLoot;
+    private int minimumEffects;
+    private int minimumEffectsSuper;
     private double rareChance;
     private String startSound;
     private String stopSound;
@@ -49,8 +52,9 @@ public class Configuration {
     boolean init() {
         checkLicense();
 
-        if (c_ver != c.getInt("configVersion")) {
-            if (!tryUpdate()) {
+        int v = c.getInt("configVersion");
+        if (c_ver != v) {
+            if (!tryUpdate(v)) {
                 pl.getLogger().error("Invalid config. Plugin will be disabled.");
                 pl.getServer().getPluginManager().disablePlugin(pl);
                 return false;
@@ -69,7 +73,15 @@ public class Configuration {
         return true;
     }
 
-    private boolean tryUpdate() {
+    private boolean tryUpdate(int v) {
+        if (v == 1) {
+            c.set("minimumEffects", 1);
+            c.set("envoy.event.end.onefound", "§7An envoy have been found! Envoys left: ");
+            c.set("configVersion ", c_ver);
+            c.save();
+            return true;
+        }
+
         return false;
     }
 
@@ -79,6 +91,8 @@ public class Configuration {
         stopSound = c.getString("endSound");
         rareChance = c.getDouble("rareChance", 1.0);
         minimumLoot = c.getInt("minimumLoot", 3);
+        minimumEffects = c.getInt("minimumEffects", 1);
+        minimumEffectsSuper = c.getInt("minimumEffects", 1);
         bid = c.getInt("envoyBlockId", 54);
         bm = c.getInt("envoyBlockMeta");
         subid = c.getInt("rareEnvoyBlockId", 130);
@@ -107,7 +121,7 @@ public class Configuration {
     private boolean loadItems() {
         Config i = new Config(pl.getDataFolder() + "/items.yml", Config.YAML);
 
-        if (c_ver != i.getInt("version")) {
+        if (c_ver_i != i.getInt("version")) {
             pl.getLogger().error("Invalid item config. Plugin will be disabled.");
             pl.getServer().getPluginManager().disablePlugin(pl);
             return false;
@@ -166,13 +180,23 @@ public class Configuration {
                 }
                 items.add(new ItemSlot(Double.parseDouble(info[3]), true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enc, lvl));
             }
+            int normalSize = 0;
             for (String s : i.getStringList("effectsNormal")) {
                 String[] info = s.split(":");
                 effects.add(new EffectSlot(Double.parseDouble(info[3]), false, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2])));
+                normalSize++;
             }
+            if (normalSize == 0) {
+                minimumEffectsSuper = 0;
+            }
+            int superSize = 0;
             for (String s : i.getStringList("effectsSuper")) {
                 String[] info = s.split(":");
                 effects.add(new EffectSlot(Double.parseDouble(info[3]), true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2])));
+                superSize++;
+            }
+            if (superSize == 0) {
+                minimumEffectsSuper = 0;
             }
         } catch (Exception e) {
             pl.getLogger().error("An error occurred while trying to load items config.", e);
@@ -252,6 +276,7 @@ public class Configuration {
         e.spawnOpenEffect(su, l);
         giveItems(p, su);
         giveEffects(p, su);
+        broadcast("found", currentEnvoys.size());
         checkLastEnvoy();
     }
 
@@ -297,7 +322,7 @@ public class Configuration {
     private void giveEffects(Player p, boolean su) {
         StringBuilder n = new StringBuilder();
         int given = 0;
-        while (given < Math.min(1, effects.size())) {
+        while (given < (su ? minimumEffectsSuper : minimumEffects)) {
             for (EffectSlot slot : effects) {
                 if ((su && !slot.su) || (!su && slot.su)) {
                     if (rand(slot.chance)) {
@@ -339,6 +364,11 @@ public class Configuration {
                     pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.end"));
                 }
                 playSound(stopSound);
+                break;
+            case "found":
+                if (d > 0) {
+                    pl.getServer().broadcastMessage(Envoys.prefix + translate("envoy.event.onefound") + d);
+                }
                 break;
         }
     }

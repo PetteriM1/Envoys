@@ -1,5 +1,5 @@
 # Config version, do not edit!
-configVersion: 1
+configVersion: 2
 
 # Time between envoys (in seconds)
 time: 1200
@@ -17,6 +17,8 @@ rareChance: 1.0
 
 # minimum amount of item stacks player must get from a single envoy
 minimumLoot: 3
+# minimum amount of effects player must get from a single envoy
+minimumEffects: 1
 
 # envoy block id and meta
 # default is chest (54:0)
@@ -48,6 +50,7 @@ items.given: "§aYou got: §e"
 effects.given: "§aYou got: §6"
 envoy.event.start: "§aEvent started! Envoys spawned: "
 envoy.event.end: "§6Event ended!"
+envoy.event.end.onefound: "§7An envoy have been found! Envoys left: "
 envoy.event.end.allfound: "§6Event ended, all envoys have been found!"
 title.basic: "§7Basic Envoy"
 title.super: "§7Super Envoy"
