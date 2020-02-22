@@ -233,11 +233,7 @@ public class Configuration {
         try {
             d = new Config(pl.getDataFolder() + "/data.yml", Config.YAML);
 
-            if (d.getBoolean("firstRun", true)) {
-                pl.getServer().getLogger().info(Envoys.prefix + "§aEnvoys plugin by PetteriM1 loaded! Please consider leaving a rating on nukkitx.com if you like the plugin :)");
-                d.set("firstRun", false);
-                d.save();
-            }
+            pl.getServer().getLogger().info(Envoys.prefix + "§aEnvoys plugin by PetteriM1 loaded! Please consider leaving a rating on nukkitx.com if you like the plugin :)");
 
             List<String> rd = d.getStringList("envoys");
 
