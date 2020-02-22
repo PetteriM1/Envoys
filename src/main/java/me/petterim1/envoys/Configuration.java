@@ -334,7 +334,7 @@ public class Configuration {
         int g = 0;
         while (g < (su ? minimumLootSuper : minimumLoot)) {
             for (ItemSlot slot : items) {
-                if ((su && !slot.su) || (!su && slot.su)) {
+                if ((su && slot.su) || (!su && !slot.su)) {
                     if (rand(slot.chance)) {
                         n.append('[').append(slot.item.getName()).append(']');
                         p.getInventory().addItem(slot.item);
@@ -351,7 +351,7 @@ public class Configuration {
         int g = 0;
         while (g < (su ? minimumEffectsSuper : minimumEffects)) {
             for (EffectSlot slot : effects) {
-                if ((su && !slot.su) || (!su && slot.su)) {
+                if ((su && slot.su) || (!su && !slot.su)) {
                     if (rand(slot.chance)) {
                         n.append('[').append(slot.effect.getName()).append(']');
                         slot.effect.add(p);
