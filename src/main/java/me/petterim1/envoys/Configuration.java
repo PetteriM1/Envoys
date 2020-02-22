@@ -78,6 +78,8 @@ public class Configuration {
         if (v == 1) {
             c.set("minimumEffects", 1);
             c.set("envoy.event.end.onefound", "§7An envoy have been found! Envoys left: ");
+            c.set("command.left.locations", "§7Envoys are spawned at these locations: ");
+            c.set("command.generic.notrunning", "§cThere is no envoys event ongoing");
             c.set("configVersion ", c_ver);
             c.save();
             return true;
@@ -275,6 +277,14 @@ public class Configuration {
         return s.toString();
     }
 
+    String getCurrentLocations() {
+        StringBuilder s = new StringBuilder();
+        for (Location l : currentEnvoys.keySet()) {
+            s.append(l.x).append(", ").append(l.y).append(", ").append(l.z).append(", ").append(l.level.getName()).append('\n');
+        }
+        return s.toString();
+    }
+
     void quitEditmode() {
         for (Location l : allEnvoys) {
             l.getLevel().setBlock(l, Block.get(0), true, false);
@@ -408,7 +418,7 @@ public class Configuration {
     }
 
     private void checkLicense() {
-        if (pl.getDescription().getAuthors().size() != 1 || !pl.getDescription().getAuthors().get(0).equals("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys") || !pl.getDescription().getDescription().equals("Envoys plugin for Nukkit")) {
+        if (pl.getDescription().getAuthors().size() != 1 || !pl.getDescription().getAuthors().get(0).equals("PetteriM1") || !pl.getDescription().getVersion().startsWith("1") || !pl.getDescription().getMain().equals("me.petterim1.envoys.Envoys") || !pl.getDescription().getName().equals("Envoys") || !pl.getDescription().getDescription().equals("Envoys plugin for Nukkit") || !pl.getDescription().getWebsite().equals("https://nukkitx.com/resources/envoys.358/")) {
             System.exit(1);
         }
     }

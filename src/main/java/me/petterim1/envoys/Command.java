@@ -54,7 +54,7 @@ public class Command extends cn.nukkit.command.Command {
                     if (Configuration.now) {
                         pl.c.endEnvoy(false);
                     } else {
-                        s.sendMessage(Envoys.prefix + pl.c.translate("command.stop.notrunning"));
+                        s.sendMessage(Envoys.prefix + pl.c.translate("command.generic.notrunning"));
                     }
                 }
                 break;
@@ -88,7 +88,11 @@ public class Command extends cn.nukkit.command.Command {
                 if (!s.hasPermission("envoys.command.left")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.left");
                 } else {
-                    s.sendMessage("todo_ver_1_0_1_unimplemented_feature"); //TODO
+                    if (Configuration.now) {
+                        s.sendMessage(Envoys.prefix + pl.c.translate("command.left.locations") + '\n' + pl.c.getCurrentLocations());
+                    } else {
+                        s.sendMessage(Envoys.prefix + pl.c.translate("command.generic.notrunning"));
+                    }
                 }
                 break;
             default:

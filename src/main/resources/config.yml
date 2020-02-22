@@ -2,7 +2,7 @@
 configVersion: 2
 
 # Time between envoys (in seconds)
-time: 1200
+time: 1800
 
 # How long does envoys last (in seconds)
 duration: 300
@@ -45,7 +45,8 @@ command.editmode.enabled: "§aEdit mode enabled"
 command.editmode.disabled: "§aEdit mode disabled"
 command.drops.locations: "§7Envoys may spawn at these locations: "
 command.start.alreadyrunning: "§cThere is an event ongoing already"
-command.stop.notrunning: "§cThere is no envoys event ongoing"
+command.left.locations: "§7Envoys are spawned at these locations: "
+command.generic.notrunning: "§cThere is no envoys event ongoing"
 items.given: "§aYou got: §e"
 effects.given: "§aYou got: §6"
 envoy.event.start: "§aEvent started! Envoys spawned: "

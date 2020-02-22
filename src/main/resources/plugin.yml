@@ -1,9 +1,21 @@
+# ______
+# |  ____|
+# | |__   _ ____   _____  _   _ ___
+# |  __| | '_ \ \ / / _ \| | | / __|
+# | |____| | | \ V / (_) | |_| \__ \
+# |______|_| |_|\_/ \___/ \__, |___/
+#                          __/ |
+#                         |___/     By PetteriM1
+#
+# Warning: Editing this file incorrectly will make the plugin not to load
+
 name: Envoys
 main: me.petterim1.envoys.Envoys
 version: "${pom.version}"
 api: ["1.0.9"]
 author: PetteriM1
 description: Envoys plugin for Nukkit
+website: https://nukkitx.com/resources/envoys.358/
 
 permissions:
   envoys.command.main:
