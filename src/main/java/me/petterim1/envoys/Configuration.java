@@ -77,7 +77,7 @@ public class Configuration {
     private boolean tryUpdate(int v) {
         if (v == 1) {
             c.set("minimumEffects", 1);
-            c.set("envoy.event.end.onefound", "§7An envoy have been found! Envoys left: ");
+            c.set("envoy.event.onefound", "§7An envoy have been found! Envoys left: ");
             c.set("command.left.locations", "§7Envoys are spawned at these locations: ");
             c.set("command.generic.notrunning", "§cThere is no envoys event ongoing");
             c.set("configVersion ", c_ver);
