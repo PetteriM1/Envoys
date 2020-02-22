@@ -59,7 +59,7 @@ public class Command extends cn.nukkit.command.Command {
                 }
                 break;
             case "about":
-                s.sendMessage(Envoys.prefix + "\n\u00A76Version " + pl.getDescription().getVersion() + "\n\u00A76Created by PetteriM1\n\u00A76This plugin can be downloaded for free from nukkitx.com");
+                s.sendMessage(Envoys.prefix + "\n§6Version " + pl.getDescription().getVersion() + "\n§6Created by PetteriM1\n§6This plugin can be downloaded for free from nukkitx.com");
                 break;
             case "drops":
                 if (!s.hasPermission("envoys.command.drops")) {
@@ -88,7 +88,7 @@ public class Command extends cn.nukkit.command.Command {
                 if (!s.hasPermission("envoys.command.left")) {
                     s.sendMessage(Envoys.prefix + pl.c.translate("command.noperm") + "envoys.command.left");
                 } else {
-
+                    s.sendMessage("todo_ver_1_0_1_unimplemented_feature"); //TODO
                 }
                 break;
             default:
@@ -111,10 +111,10 @@ public class Command extends cn.nukkit.command.Command {
     }
 
     private static void showEditModeHelp(CommandSender s) {
-        s.sendMessage("\u00A77In edit mode you can edit the locations where envoys can appear. The changes will take effect in the next envoy event.");
-        s.sendMessage("\u00A75> \u00A77To set envoy location place a bedrock block.");
-        s.sendMessage("\u00A75> \u00A77To delete envoy location break the bedrock block.");
-        s.sendMessage("\u00A75> \u00A77To quit the edit mode run /envoys edit command again.");
-        s.sendMessage("\u00A77Rare envoys will appear randomly at these locations. You can edit rare envoy chance in the config.");
+        s.sendMessage("§7In edit mode you can edit the locations where envoys can appear. The changes will take effect in the next envoy event.");
+        s.sendMessage("§5> §7To set envoy location place a bedrock block.");
+        s.sendMessage("§5> §7To delete envoy location break the bedrock block.");
+        s.sendMessage("§5> §7To quit the edit mode run /envoys edit command again.");
+        s.sendMessage("§7Rare envoys will appear randomly at these locations. You can edit rare envoy chance in the config.");
     }
 }

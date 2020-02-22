@@ -6,7 +6,7 @@ import cn.nukkit.plugin.PluginBase;
 public class Envoys extends PluginBase {
 
     Configuration c;
-    static final String prefix = "\u00A78[\u00A7l\u00A7cEnvoys\u00A7r\u00A78] \u00A7r";
+    static final String prefix = "§8[§l§cEnvoys§r§8] §r";
 
     public void onEnable() {
         saveDefaultConfig();

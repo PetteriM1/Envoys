@@ -4,6 +4,9 @@ version: 1
 # Format:
 # id:meta:count:chance[:name][:enchantmentId:enchantmentLevel]
 
+# Warning: Do not set the chance too low if you don't have many items on the list!
+# Chance between 0.5 and 1.5 is recommended
+
 # Items for normal envoys
 itemsNormal:
   - "260:0:10:1.0"

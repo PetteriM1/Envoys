@@ -30,6 +30,7 @@ public class Configuration {
     private int subid;
     private int subm;
     private int minimumLoot;
+    private int minimumLootSuper;
     private int minimumEffects;
     private int minimumEffectsSuper;
     private double rareChance;
@@ -128,6 +129,7 @@ public class Configuration {
         }
 
         try {
+            int normalISize = 0;
             for (String s : i.getStringList("itemsNormal")) {
                 String[] info = s.split(":");
                 String name;
@@ -152,8 +154,18 @@ public class Configuration {
                     enc = -1;
                     lvl = -1;
                 }
-                items.add(new ItemSlot(Double.parseDouble(info[3]), false, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enc, lvl));
+                double ch = Double.parseDouble(info[3]);
+                if (ch < 0.5) {
+                    pl.getLogger().warning("Setting item chance lower than 0.5 is not recommended and can make the server to freeze");
+                }
+                items.add(new ItemSlot(ch, false, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enc, lvl));
+                normalISize++;
             }
+            if (normalISize == 0) {
+                minimumLoot = 0;
+                pl.getLogger().warning("No items set for normal envoys");
+            }
+            int superISize = 0;
             for (String s : i.getStringList("itemsSuper")) {
                 String[] info = s.split(":");
                 String name;
@@ -178,7 +190,16 @@ public class Configuration {
                     enc = -1;
                     lvl = -1;
                 }
-                items.add(new ItemSlot(Double.parseDouble(info[3]), true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enc, lvl));
+                double ch = Double.parseDouble(info[3]);
+                if (ch < 0.5) {
+                    pl.getLogger().warning("Setting item chance lower than 0.5 is not recommended and can make the server to freeze");
+                }
+                items.add(new ItemSlot(ch, true, Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[2]), name, enc, lvl));
+                superISize++;
+            }
+            if (superISize == 0) {
+                minimumLootSuper = 0;
+                pl.getLogger().warning("No items set for super envoys");
             }
             int normalSize = 0;
             for (String s : i.getStringList("effectsNormal")) {
@@ -187,7 +208,7 @@ public class Configuration {
                 normalSize++;
             }
             if (normalSize == 0) {
-                minimumEffectsSuper = 0;
+                minimumEffects = 0;
             }
             int superSize = 0;
             for (String s : i.getStringList("effectsSuper")) {
@@ -199,7 +220,7 @@ public class Configuration {
                 minimumEffectsSuper = 0;
             }
         } catch (Exception e) {
-            pl.getLogger().error("An error occurred while trying to load items config.", e);
+            pl.getLogger().error("An error occurred while trying to load items config", e);
             return false;
         }
 
@@ -211,20 +232,20 @@ public class Configuration {
             d = new Config(pl.getDataFolder() + "/data.yml", Config.YAML);
 
             if (d.getBoolean("firstRun", true)) {
-                pl.getServer().getLogger().info(Envoys.prefix + "\u00A7aEnvoys plugin by PetteriM1 loaded! Please consider leaving a rating on nukkitx.com if you like the plugin :)");
+                pl.getServer().getLogger().info(Envoys.prefix + "§aEnvoys plugin by PetteriM1 loaded! Please consider leaving a rating on nukkitx.com if you like the plugin :)");
                 d.set("firstRun", false);
                 d.save();
             }
 
-            List<String> rawData = d.getStringList("envoys");
+            List<String> rd = d.getStringList("envoys");
 
-            if (rawData != null) {
-                allEnvoys = getSaveData(rawData);
+            if (rd != null) {
+                allEnvoys = getSaveData(rd);
                 if (allEnvoys.size() > 0) {
-                    pl.getServer().getLogger().info(Envoys.prefix + "\u00A77Saved data loaded successfully");
+                    pl.getLogger().info("Saved data loaded successfully");
                 }
             } else {
-                pl.getServer().getLogger().info(Envoys.prefix + "\u00A77No saved data found");
+                pl.getLogger().info("No saved data found");
             }
         } catch (Exception e) {
             pl.getLogger().error("There was an error while loading saved data. Invalid data.yml file detected.", e);
@@ -236,7 +257,7 @@ public class Configuration {
     }
 
     String getTime() {
-        return now ? "\u00A7anow" : (((nextEnvoy % 86400 ) / 3600) + "h " + (((nextEnvoy % 86400 ) % 3600 ) / 60) + "m " + (((nextEnvoy % 86400 ) % 3600 ) % 60) + 's');
+        return now ? "§anow" : (((nextEnvoy % 86400 ) / 3600) + "h " + (((nextEnvoy % 86400 ) % 3600 ) / 60) + "m " + (((nextEnvoy % 86400 ) % 3600 ) % 60) + 's');
     }
 
     void saveData() {
@@ -247,11 +268,11 @@ public class Configuration {
     }
 
     String getLocations() {
-        StringBuilder str = new StringBuilder();
+        StringBuilder s = new StringBuilder();
         for (Location l : allEnvoys) {
-            str.append(l.x).append(", ").append(l.y).append(", ").append(l.z).append(", ").append(l.level.getName()).append('\n');
+            s.append(l.x).append(", ").append(l.y).append(", ").append(l.z).append(", ").append(l.level.getName()).append('\n');
         }
-        return str.toString();
+        return s.toString();
     }
 
     void quitEditmode() {
@@ -281,7 +302,7 @@ public class Configuration {
     }
 
     private void checkLastEnvoy() {
-        if (currentEnvoys.size() <= 0) {
+        if (currentEnvoys.size() == 0) {
             endEnvoy(true);
         }
     }
@@ -304,14 +325,14 @@ public class Configuration {
 
     private void giveItems(Player p, boolean su) {
         StringBuilder n = new StringBuilder();
-        int itemsGiven = 0;
-        while (itemsGiven < minimumLoot) {
+        int g = 0;
+        while (g < (su ? minimumLootSuper : minimumLoot)) {
             for (ItemSlot slot : items) {
                 if ((su && !slot.su) || (!su && slot.su)) {
                     if (rand(slot.chance)) {
                         n.append('[').append(slot.item.getName()).append(']');
                         p.getInventory().addItem(slot.item);
-                        itemsGiven++;
+                        g++;
                     }
                 }
             }
@@ -321,14 +342,14 @@ public class Configuration {
 
     private void giveEffects(Player p, boolean su) {
         StringBuilder n = new StringBuilder();
-        int given = 0;
-        while (given < (su ? minimumEffectsSuper : minimumEffects)) {
+        int g = 0;
+        while (g < (su ? minimumEffectsSuper : minimumEffects)) {
             for (EffectSlot slot : effects) {
                 if ((su && !slot.su) || (!su && slot.su)) {
                     if (rand(slot.chance)) {
                         n.append('[').append(slot.effect.getName()).append(']');
                         slot.effect.add(p);
-                        given++;
+                        g++;
                     }
                 }
             }
@@ -449,13 +470,13 @@ public class Configuration {
             return null;
         }
 
-        List<String> result = new ArrayList<>();
+        List<String> da = new ArrayList<>();
 
         for (Location l : data) {
-            result.add(l.level.getName() + ':' + (int) l.x + ':' + (int) l.y + ':' + (int) l.z);
+            da.add(l.level.getName() + ':' + (int) l.x + ':' + (int) l.y + ':' + (int) l.z);
         }
 
-        return result;
+        return da;
     }
 
     private List<Location> getSaveData(List<String> data) {
@@ -463,13 +484,13 @@ public class Configuration {
             return null;
         }
 
-        List<Location> result = new ArrayList<>();
+        List<Location> da = new ArrayList<>();
 
         for (String s : data) {
-            String[] raw = s.split(":");
-            result.add(new Location(Double.parseDouble(raw[1]), Double.parseDouble(raw[2]), Double.parseDouble(raw[3]), pl.getServer().getLevelByName(raw[0])));
+            String[] r = s.split(":");
+            da.add(new Location(Double.parseDouble(r[1]), Double.parseDouble(r[2]), Double.parseDouble(r[3]), pl.getServer().getLevelByName(r[0])));
         }
 
-        return result;
+        return da;
     }
 }
